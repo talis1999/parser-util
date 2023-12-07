@@ -1,42 +1,53 @@
+import { get } from "lodash";
 import createSchema from "./utils/createSchema";
-import dataParser from "./utils/dataParser";
+import dataParser, { Data } from "./utils/dataParser";
+// get(object, path, [defaultValue]) - Gets the value at path of object. If the resolved value is undefined, the defaultValue is returned in its place.
 
 const personSchema = createSchema({
-  name: "c",
-  lastName: "d",
+  name: "n",
+  lastName: "ln",
 });
 
-const arrItemSchema = createSchema(
-  {
-    itemName: "i",
-  },
-  "inner"
+const phoneAccessorieSchema = createSchema(
+  { id: "id", name: "accessorie" },
+  "pa"
 );
 
-const itemSchema = createSchema(
+const phoneItemSchema = createSchema(
   {
-    id: "b",
-    unavaliableDataExample: "../c",
-    arr: arrItemSchema,
+    id: "id",
+    unavaliableDataExample: "ln",
+    accessories: phoneAccessorieSchema,
   },
-  "a"
+  "p"
 );
 
-const mainSchema = createSchema({
+const phoneStoreSchema = createSchema({
   person: personSchema,
-  items: itemSchema,
+  phones: phoneItemSchema,
 });
 
-const example = dataParser(
-  {
-    a: [
-      { b: "2", inner: [{ i: 1 }] },
-      { b: "4", e: 6 },
-    ],
-    c: "alex",
-    d: "talisman",
-  },
-  mainSchema
-);
+const mockData: Data = {
+  p: [
+    {
+      id: 1,
+      pa: [
+        { id: 1, accessorie: "headphones" },
+        { id: 2, accessorie: "charger", someExtraData: "bla" },
+      ],
+    },
+    { id: 2, e: 6 },
+  ],
+  n: "alex",
+  ln: "talisman",
+};
 
-console.log(JSON.stringify(example));
+const example = dataParser(mockData, phoneStoreSchema);
+
+console.log("/////////////////////////");
+console.log("Phone store--");
+console.log(example);
+
+console.log("/////////////////////////");
+console.log("First phone accesories--");
+console.log(get(example, "phones[0]accessories"));
