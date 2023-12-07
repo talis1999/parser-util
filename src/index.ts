@@ -3,7 +3,7 @@ import createSchema from "./utils/createSchema";
 import dataParser, { Data } from "./utils/dataParser";
 // get(object, path, [defaultValue]) - Gets the value at path of object. If the resolved value is undefined, the defaultValue is returned in its place.
 
-const personSchema = createSchema({
+const ownerSchema = createSchema({
   name: "n",
   lastName: "ln",
 });
@@ -23,7 +23,7 @@ const phoneItemSchema = createSchema(
 );
 
 const phoneStoreSchema = createSchema({
-  person: personSchema,
+  owner: ownerSchema,
   phones: phoneItemSchema,
 });
 
