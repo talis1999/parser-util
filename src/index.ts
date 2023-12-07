@@ -41,7 +41,16 @@ const dataParser = (data: Data, options: Options): unknown => {
   return { ...objectInstance };
 };
 
+const personOptions = {
+  // Simple schema examle
+  schema: {
+    name: "c",
+    lastName: "d",
+  },
+};
+
 const arrItemOptions: Options = {
+  // Array item schema example
   schema: {
     itemName: "i",
   },
@@ -49,6 +58,7 @@ const arrItemOptions: Options = {
 };
 
 const itemsOptions: Options = {
+  // Array item schema with nested array example
   schema: {
     id: "b",
     unavaliableDataExample: "../c",
@@ -57,17 +67,11 @@ const itemsOptions: Options = {
   arrayLinkKey: "a",
 };
 
-const personOptions = {
-  schema: {
-    name: "c",
-    lastName: "d",
-  },
-};
-
 const options: Options = {
+  // Schema with nested schema examle
   schema: {
-    items: itemsOptions,
     person: personOptions,
+    items: itemsOptions,
   },
 };
 
