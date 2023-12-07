@@ -40,31 +40,47 @@ const dataParser = (data: Data, options: Options): unknown => {
   return { ...objectInstance };
 };
 
-const options: Options = {
+const arrItemOptions: Options = {
   schema: {
-    items: {
-      schema: {
-        id: "b",
-        unavaliableDataExample: "c",
-      },
-      arrayLinkKey: "a",
-    },
-    items2: {
-      schema: { id: "b" },
-      arrayLinkKey: "a",
-    },
-    person: {
-      schema: {
-        name: "c",
-        lastName: "d",
-      },
-    },
+    itemName: "i",
+  },
+  arrayLinkKey: "inner",
+};
+
+const itemsOptions: Options = {
+  schema: {
+    id: "b",
+    unavaliableDataExample: "../c",
+    arr: arrItemOptions,
+  },
+  arrayLinkKey: "a",
+};
+
+const personOptions = {
+  schema: {
+    name: "c",
+    lastName: "d",
   },
 };
 
-console.log(
-  dataParser(
-    { a: [{ b: "2" }, { b: "4", e: 6 }], c: "alex", d: "talisman" },
-    options
-  )
+const options: Options = {
+  schema: {
+    items: itemsOptions,
+    person: personOptions,
+  },
+};
+
+const example = dataParser(
+  {
+    a: [
+      { b: "2", inner: [{ i: 1 }] },
+      { b: "4", e: 6 },
+    ],
+    c: "alex",
+    d: "talisman",
+  },
+  options
 );
+
+console.log(example);
+console.log(get(example, "items[0]"));
