@@ -6,6 +6,7 @@ import dataParser, { Data } from "./utils/dataParser";
 const ownerSchema = createSchema({
   name: "n",
   lastName: "ln",
+  role: "roles[0].title",
 });
 
 const phoneAccessorieSchema = createSchema(
@@ -16,7 +17,7 @@ const phoneAccessorieSchema = createSchema(
 const phoneItemSchema = createSchema(
   {
     id: "id",
-    unavaliableDataExample: "ln",
+    noAccessOutsideOfLinkedArraysScope: "ln",
     accessories: phoneAccessorieSchema,
   },
   "p"
@@ -40,6 +41,12 @@ const mockData: Data = {
   ],
   n: "alex",
   ln: "talisman",
+  roles: [
+    {
+      id: 1,
+      title: "store-owner",
+    },
+  ],
 };
 
 const example = dataParser(mockData, phoneStoreSchema);
@@ -50,4 +57,4 @@ console.log(example);
 
 console.log("/////////////////////////");
 console.log("First phone accesories--");
-console.log(get(example, "phones[0]accessories"));
+console.log(get(example, "phones[0].accessories"));

@@ -12,6 +12,14 @@ export type Schema = Record<string, Options>;
 
 export type Data = Record<string, unknown>;
 
+/**
+ * Molds data to new data with new format using original data values.
+ *
+ * @param {Data} data - The original, input data that will be molded.
+ * @param {Options} options - The mold, holds either the key path to the "original data" value or a schema that will mold the data at hand.
+ * @returns {unknown} Returns the new data object (or array/ value when used recursivly).
+ */
+
 const dataParser = (data: Data, options: Options): unknown => {
   if (isPath(options)) return get(data, options);
 
