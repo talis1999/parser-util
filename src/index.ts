@@ -4,7 +4,7 @@ import { get, isPlainObject } from "lodash";
 
 interface ParseSchema {
   schema: Schema;
-  arrayLinkKey?: string;
+  arrayRef?: string;
 }
 type Path = string;
 type Options = ParseSchema | Path;
@@ -12,20 +12,25 @@ type Schema = Record<string, Options>;
 
 type Data = Record<string, unknown>;
 
+// Basic type validators
 const isPath = (options: Options): options is Path =>
   typeof options === "string";
-
 const isData = (data: unknown): data is Data => isPlainObject(data);
 
-// This util would be capable of molding data object to a new mold -
-// ! - Due to current build array link operations (via optional arrayLinkKey) the array items wont have access to data outside their scope
-// next step - implement ../
-// * implement only value boolean
+const createSchema = (
+  schema: Schema,
+  arrayRef: ParseSchema["arrayRef"] | null = null
+): ParseSchema => {
+  const newSchema: ParseSchema = { schema };
+  if (arrayRef) newSchema.arrayRef = arrayRef;
+  return newSchema;
+};
+
 const dataParser = (data: Data, options: Options): unknown => {
   if (isPath(options)) return get(data, options);
 
-  if (options.arrayLinkKey) {
-    const arrayData = get(data, options.arrayLinkKey);
+  if (options.arrayRef) {
+    const arrayData = get(data, options.arrayRef);
     if (!Array.isArray(arrayData)) return [];
     return [...arrayData].map((item: unknown) => {
       if (!isData(item)) return item;
@@ -41,39 +46,31 @@ const dataParser = (data: Data, options: Options): unknown => {
   return { ...objectInstance };
 };
 
-const personOptions = {
-  // Simple schema examle
-  schema: {
-    name: "c",
-    lastName: "d",
-  },
-};
+const personSchema = createSchema({
+  name: "c",
+  lastName: "d",
+});
 
-const arrItemOptions: Options = {
-  // Array item schema example
-  schema: {
+const arrItemSchema = createSchema(
+  {
     itemName: "i",
   },
-  arrayLinkKey: "inner",
-};
+  "inner"
+);
 
-const itemsOptions: Options = {
-  // Array item schema with nested array example
-  schema: {
+const itemSchema = createSchema(
+  {
     id: "b",
     unavaliableDataExample: "../c",
-    arr: arrItemOptions,
+    arr: arrItemSchema,
   },
-  arrayLinkKey: "a",
-};
+  "a"
+);
 
-const options: Options = {
-  // Schema with nested schema examle
-  schema: {
-    person: personOptions,
-    items: itemsOptions,
-  },
-};
+const mainSchema = createSchema({
+  person: personSchema,
+  items: itemSchema,
+});
 
 const example = dataParser(
   {
@@ -84,8 +81,8 @@ const example = dataParser(
     c: "alex",
     d: "talisman",
   },
-  options
+  mainSchema
 );
 
 console.log(example);
-console.log(get(example, "items[0]"));
+// console.log(get(example, "items[0].arr"));
