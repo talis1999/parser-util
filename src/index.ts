@@ -3,11 +3,12 @@ import { get, isPlainObject } from "lodash";
 // isPlainObject(value) - Checks if value is a plain object, that is, an object created by the Object constructor or one with a [[Prototype]] of null
 
 interface ParseSchema {
-  schema: Record<string, Options>;
+  schema: Schema;
   arrayLinkKey?: string;
 }
 type Path = string;
 type Options = ParseSchema | Path;
+type Schema = Record<string, Options>;
 
 type Data = Record<string, unknown>;
 
