@@ -1,0 +1,57 @@
+# Node.js
+node_modules/
+
+# TypeScript
+*.js
+*.js.map
+*.d.ts
+
+# Visual Studio Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# JetBrains IDEs
+.idea/
+
+# Editors
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Logs and databases
+*.log
+*.sqlite
+*.sqlite3
+*.log*
+npm-debug.log*
+
+# Dependency directories
+/jspm_packages/
+/bower_components/
+/vendor/
+
+# Typescript
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+
+# Build output
+/build/
+/dist/
+/out/
+
+# Dependency directories
+/bower_components/
